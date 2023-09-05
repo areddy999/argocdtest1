@@ -17,6 +17,12 @@ spec:
       - image: docker.io/library/h2f-soldier-portal
         name: soldier-portal
         imagePullPolicy: IfNotPresent
+        env:
+          - name: PG_PW
+              valueFrom:
+              secretKeyRef:
+                name: soldierportalsecrets
+                key: PG_PW
         envFrom:
         - configMapRef:
            name: configmap-soldier-portal        
