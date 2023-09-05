@@ -19,7 +19,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: PG_PW
-              valueFrom:
+            valueFrom:
               secretKeyRef:
                 name: soldierportalsecrets
                 key: PG_PW
