@@ -27,7 +27,12 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: soldierportalsecrets
-                key: CLIENT_SECRET                
+                key: CLIENT_SECRET
+          - name: SQLSERVER_PW
+            valueFrom:
+              secretKeyRef:
+                name: soldierportalsecrets
+                key: SQLSERVER_PW
         envFrom:
         - configMapRef:
            name: configmap-soldier-portal        
