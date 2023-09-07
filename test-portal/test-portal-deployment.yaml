@@ -21,17 +21,17 @@ spec:
           - name: PG_PW
             valueFrom:
               secretKeyRef:
-                name: soldierportalsecrets
+                name: portalsecrets
                 key: PG_PW
           - name: CLIENT_SECRET
             valueFrom:
               secretKeyRef:
-                name: soldierportalsecrets
+                name: portalsecrets
                 key: CLIENT_SECRET
           - name: SQLSERVER_PW
             valueFrom:
               secretKeyRef:
-                name: soldierportalsecrets
+                name: portalsecrets
                 key: SQLSERVER_PW
         envFrom:
         - configMapRef:
