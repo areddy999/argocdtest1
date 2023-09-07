@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-portal
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: admin-portal
+  template:
+    metadata:
+      labels:
+        app: admin-portal
+    spec:
+      containers:
+      - image: docker.io/library/h2f-admin-portal
+        name: admin-portal
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: PG_PW
+            valueFrom:
+              secretKeyRef:
+                name: portalsecrets
+                key: PG_PW
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: portalsecrets
+                key: CLIENT_SECRET
+          - name: SQLSERVER_PW
+            valueFrom:
+              secretKeyRef:
+                name: portalsecrets
+                key: SQLSERVER_PW                
+        envFrom:
+        - configMapRef:
+           name: configmap-admin-portal        
+        ports:
+        - containerPort: 5002
