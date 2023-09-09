@@ -23,7 +23,26 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}        
+          env:
+            - name: PG_PW
+              valueFrom:
+                secretKeyRef:
+                  name: portalsecrets
+                  key: PG_PW
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: portalsecrets
+                  key: CLIENT_SECRET
+            - name: SQLSERVER_PW
+              valueFrom:
+                secretKeyRef:
+                  name: portalsecrets
+                  key: SQLSERVER_PW          
+          envFrom:
+          - configMapRef:
+             name: configmap-soldier-portal           
           ports:
             - name: http
               containerPort: 5001
