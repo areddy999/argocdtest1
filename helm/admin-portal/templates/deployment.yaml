@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "admin-portal.fullname" . }}
+  labels:
+    app: {{ template "admin-portal.name" . }}
+    chart: {{ template "admin-portal.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: {{ template "admin-portal.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "admin-portal.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}        
+          env:
+            - name: PG_PW
+              valueFrom:
+                secretKeyRef:
+                  name: portalsecrets
+                  key: PG_PW
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: portalsecrets
+                  key: CLIENT_SECRET
+            - name: SQLSERVER_PW
+              valueFrom:
+                secretKeyRef:
+                  name: portalsecrets
+                  key: SQLSERVER_PW          
+          envFrom:
+          - configMapRef:
+             name: configmap-admin-portal           
+          ports:
+            - name: http
+              containerPort: 5002
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
