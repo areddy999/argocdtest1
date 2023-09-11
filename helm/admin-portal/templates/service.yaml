@@ -3,8 +3,8 @@ kind: Service
 metadata:
   name: {{ template "admin-portal.fullname" . }}
   labels:
-    app: {{ template "soldier-portal.name" . }}
-    chart: {{ template "soldier-portal.chart" . }}
+    app: {{ template "admin-portal.name" . }}
+    chart: {{ template "admin-portal.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "soldier-portal.name" . }}
+    app: {{ template "admin-portal.name" . }}
     release: {{ .Release.Name }}
